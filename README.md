@@ -32,48 +32,29 @@ A powerful tool to catch online scammers who request QR codes. Disguised as a Ph
 - **Internet connection** for geolocation and tunneling
 - **ngrok account** (free) for public URLs
 
-### Installation
+### Installation & Setup
 
-#### 🖥️ macOS Users
-```bash
-# Download and run the installer
-./install.command
-```
+1. **Clone or download** this repository
 
-#### 🪟 Windows Users
-```cmd
-# Double-click or run in Command Prompt
-install_windows_new.bat
-```
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-#### 🐧 Linux Users
-```bash
-# Install dependencies manually
-pip install flask requests pyngrok
+3. **Setup ngrok**
+   - Get your auth token from: https://dashboard.ngrok.com/get-started/your-authtoken
+   - Configure ngrok with your token:
+   ```bash
+   ngrok config add-authtoken YOUR_TOKEN
+   ```
 
-# Get ngrok auth token from https://dashboard.ngrok.com
-ngrok config add-authtoken YOUR_TOKEN
+4. **Run the application**
+   ```bash
+   python3 app.py
+   ```
 
-# Run the app
-python app.py
-```
-
-### Setup Steps
-
-1. **Get ngrok Auth Token**
-   - Visit: https://dashboard.ngrok.com/get-started/your-authtoken
-   - Sign up for free account
-   - Copy your auth token
-
-2. **Run Installer**
-   - Mac: `./install.command`
-   - Windows: `install_windows.bat`
-
-3. **Enter Token**
-   - Paste your ngrok auth token when prompted
-
-4. **Get Public URL**
-   - Copy the ngrok URL from the console
+5. **Get Public URL**
+   - Copy the ngrok URL from the console output
    - Send to scammers: `"Please share your UPI QR code here: [URL]"`
 
 ## 🧪 Testing
@@ -97,8 +78,6 @@ Enter any public IP address to see location resolution:
 ```
 scammer-hunter/
 ├── app.py                 # Main Flask application
-├── install.command        # macOS installer
-├── install_windows.bat    # Windows installer
 ├── requirements.txt       # Python dependencies
 ├── captured_photos/       # Auto-created photo storage
 ├── static/
@@ -130,25 +109,22 @@ Each capture saves:
 }
 ```
 
-## 🛠️ Manual Installation
+## 📦 Dependencies
 
-If auto-installers fail:
+The application requires the following Python packages:
+- **Flask** - Web framework
+- **Requests** - HTTP library for geolocation
+- **pyngrok** - ngrok Python wrapper
 
+All dependencies are listed in `requirements.txt` and installed via:
 ```bash
-# 1. Install Python packages
-pip install flask requests pyngrok
-
-# 2. Install ngrok
-# macOS: brew install ngrok/ngrok/ngrok
-# Windows: choco install ngrok
-# Linux: snap install ngrok
-
-# 3. Setup ngrok auth
-ngrok config add-authtoken YOUR_TOKEN
-
-# 4. Run the app
-python app.py
+pip install -r requirements.txt
 ```
+
+You'll also need to install ngrok separately:
+- **macOS**: `brew install ngrok/ngrok/ngrok`
+- **Windows**: `choco install ngrok` or download from [ngrok.com](https://ngrok.com/download)
+- **Linux**: `snap install ngrok`
 
 ## 🔧 Configuration
 
@@ -194,13 +170,6 @@ pip install --user flask requests pyngrok
 python -m pip install flask requests pyngrok
 ```
 
-## 📋 Requirements
-
-- **Python 3.8+**
-- **Flask** - Web framework
-- **Requests** - HTTP library for geolocation
-- **pyngrok** - ngrok Python wrapper
-- **ngrok** - Tunneling service (external)
 
 ## 🤝 Contributing
 
