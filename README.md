@@ -43,7 +43,7 @@ A powerful tool to catch online scammers who request QR codes. Disguised as a Ph
 #### 🪟 Windows Users
 ```cmd
 # Double-click or run in Command Prompt
-install_windows.bat
+install_windows_new.bat
 ```
 
 #### 🐧 Linux Users
